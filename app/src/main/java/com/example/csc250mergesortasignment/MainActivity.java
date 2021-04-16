@@ -4,46 +4,91 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
-    private EditText inputET;
-    private TextView answerTV;
+    private ListView listOfNumbersLV;
+    private ArrayList<String> theListOfNumbersAsStrings;
+    private ArrayAdapter<String> theListOfNumbersAdapter;
+
+    private ListView theCallsToMergeSortLV;
+    private ArrayList<String> theListOfMergeSortCalls;
+    private ArrayAdapter<String> theCallsToMergeSortAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.inputET = this.findViewById(R.id.inputET);
-        this.answerTV = this.findViewById(R.id.answerTV);
+        this.listOfNumbersLV = this.findViewById(R.id.listOfNumbersLV);
+
+        //this guy will show the parts of the arraylist we are working on in mergesort
+        this.theListOfMergeSortCalls = new ArrayList<String>();
+        this.theCallsToMergeSortAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                this.theListOfMergeSortCalls);
+        this.theCallsToMergeSortLV = this.findViewById(R.id.theCallsToMergeSortLV);
+        this.theCallsToMergeSortLV.setAdapter(this.theCallsToMergeSortAdapter);
+
+
+        this.theListOfNumbersAsStrings = new ArrayList<String>();
+        this.theListOfNumbersAsStrings.add("5");
+        this.theListOfNumbersAsStrings.add("2");
+        this.theListOfNumbersAsStrings.add("8");
+        this.theListOfNumbersAsStrings.add("3");
+        this.theListOfNumbersAsStrings.add("13");
+        this.theListOfNumbersAsStrings.add("5");
+        this.theListOfNumbersAsStrings.add("5");
+        this.theListOfNumbersAsStrings.add("8");
+        this.theListOfNumbersAsStrings.add("1");
+
+        this.theListOfNumbersAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                this.theListOfNumbersAsStrings);
+
+        this.listOfNumbersLV.setAdapter(theListOfNumbersAdapter);
     }
 
-    public void onFactorialButtonClicked(View v)
+    private String buildStringFromPartOfList(ArrayList<String> theList, int begin, int end)
     {
-        String currValue = this.inputET.getText().toString();
-        this.answerTV.setText(currValue);
+        String s = "";
+        for(int i = begin; i <= end; i++)
+        {
+            s = s + theList.get(i) + " ";
+        }
+        return s;
     }
 
-    public static class FactorialProgram
+    private void mergeSort(ArrayList<String> theList, int begin, int end)
     {
-        static int factorial(int n)
+        //ask if this list is trivially sorted
+        //I only want to do anything inside mergeSort if it is NOT trivially sorted
+        String currentPartOfArray = this.buildStringFromPartOfList(theList, begin, end);
+        this.theListOfMergeSortCalls.add(currentPartOfArray);
+        this.theCallsToMergeSortAdapter.notifyDataSetChanged();
+
+        if(begin != end)
         {
-            if (n == 0)
-                return 1;
-            else
-                return(n * factorial(n-1));
-        }
-        public static void main(String[] args)
-        {
-            int fact;
-            int number=8;
-            fact = factorial(number);
-            System.out.println("Factorial of "+number+" is = "+fact);
+            int n1;
+            int L[] = new int [n1];
+            int n2;
+            int R[] = new int [n2];
+
+            int[] arr;
+            for (int i = 0; i<n1; ++i)
+                L[i] = arr[l + i];
+            for (int j=0; j<n2; ++j)
+                R[j] = arr[m + 1+ j];
         }
     }
 
-
+    public void onMergeSortButtonClicked(View v)
+    {
+        this.mergeSort(this.theListOfNumbersAsStrings,
+                0, this.theListOfNumbersAsStrings.size()-1);
+    }
 }
